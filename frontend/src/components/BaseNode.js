@@ -40,7 +40,7 @@ const BaseNode = ({
         );
       })}
       {/* Title */}
-      <div className="px-4 py-2 font-semibold text-base border-b border-gray-100 text-center bg-indigo-50 rounded-t-xl text-indigo-700 shadow-sm tracking-wide">
+      <div className="px-4 py-2 border-b border-gray-100 text-center bg-indigo-50 rounded-t-xl shadow-sm tracking-wide">
         {title}
       </div>
       {/* Content */}
