@@ -1,5 +1,3 @@
-// store.js
-
 import { create } from "zustand";
 import {
   addEdge,
@@ -40,8 +38,7 @@ export const useStore = create((set, get) => ({
       edges: addEdge(
         {
           ...connection,
-          type: "smoothstep",
-          animated: true,
+          type: "animated",
           markerEnd: { type: MarkerType.Arrow, height: "20px", width: "20px" },
         },
         get().edges
@@ -59,6 +56,49 @@ export const useStore = create((set, get) => ({
       }),
     });
   },
-}));
+  getNodeWidth: (nodeId) => {
+    const node = get().nodes.find((node) => node.id === nodeId);
+    return node?.width || 200; // Default width if not found
+  },
+  removeNode: (nodeId) => {
+    const currentState = get();
 
-export default useStore;
+    // Remove the node
+    const updatedNodes = currentState.nodes.filter(
+      (node) => node.id !== nodeId
+    );
+
+    // If it's a text node, also remove its attached outputs node
+    const removedNode = currentState.nodes.find((node) => node.id === nodeId);
+    if (removedNode?.type === "customText") {
+      const outputsNodeId = `outputs-${nodeId}`;
+      const finalNodes = updatedNodes.filter(
+        (node) => node.id !== outputsNodeId
+      );
+
+      // Remove all edges connected to this node and its outputs node
+      const updatedEdges = currentState.edges.filter(
+        (edge) =>
+          edge.source !== nodeId &&
+          edge.target !== nodeId &&
+          edge.source !== outputsNodeId &&
+          edge.target !== outputsNodeId
+      );
+
+      set({
+        nodes: finalNodes,
+        edges: updatedEdges,
+      });
+    } else {
+      // Remove all edges connected to this node
+      const updatedEdges = currentState.edges.filter(
+        (edge) => edge.source !== nodeId && edge.target !== nodeId
+      );
+
+      set({
+        nodes: updatedNodes,
+        edges: updatedEdges,
+      });
+    }
+  },
+}));
