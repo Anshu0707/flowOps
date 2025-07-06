@@ -45,102 +45,12 @@ const gridSize = 20;
 const proOptions = { hideAttribution: true };
 
 const FlowCanvasOrganism = ({ onNodeClick, onPaneClick, onFlowChange }) => {
-  const reactFlowWrapper = useRef(null);
-  const [reactFlowInstance, setReactFlowInstance] = useState(null);
-  const {
-    nodes,
-    edges,
-    getNodeID,
-    addNode,
-    onNodesChange,
-    onEdgesChange,
-    onConnect,
-  } = useStore(selector, shallow);
-
-  const getInitNodeData = (nodeID, type) => {
-    let nodeData = { id: nodeID, nodeType: `${type}` };
-    return nodeData;
-  };
-
-  const onDrop = useCallback(
-    (event) => {
-      try {
-        event.preventDefault();
-
-        if (!reactFlowWrapper.current) {
-          console.error("ReactFlow wrapper not found");
-          return;
-        }
-
-        const reactFlowBounds =
-          reactFlowWrapper.current.getBoundingClientRect();
-        const reactFlowData = event?.dataTransfer?.getData(
-          "application/reactflow"
-        );
-
-        if (!reactFlowData) {
-          return;
-        }
-
-        let appData;
-        try {
-          appData = JSON.parse(reactFlowData);
-        } catch (parseError) {
-          console.error("Failed to parse drop data:", parseError);
-          return;
-        }
-
-        const type = appData?.nodeType;
-        if (typeof type === "undefined" || !type) {
-          console.error("Invalid node type in drop data:", appData);
-          return;
-        }
-
-        if (!reactFlowInstance) {
-          console.error("ReactFlow instance not available");
-          return;
-        }
-
-        const position = reactFlowInstance.project({
-          x: event.clientX - reactFlowBounds.left,
-          y: event.clientY - reactFlowBounds.top,
-        });
-
-        if (
-          !position ||
-          typeof position.x !== "number" ||
-          typeof position.y !== "number"
-        ) {
-          console.error("Invalid position calculated:", position);
-          return;
-        }
-
-        const nodeID = getNodeID(type);
-        const newNode = {
-          id: nodeID,
-          type,
-          position,
-          data: getInitNodeData(nodeID, type),
-        };
-
-        addNode(newNode);
-
-        // Debounced flow change callback
-        const timeoutId = setTimeout(() => {
-          if (onFlowChange) {
-            const { nodes, edges } = useStore.getState();
-            onFlowChange({ nodes, edges });
-          }
-        }, 100); // Increased debounce time
-
-        // Cleanup timeout on component unmount
-        return () => clearTimeout(timeoutId);
-      } catch (error) {
-        console.error("Error in onDrop:", error);
-      }
-    },
-    [reactFlowInstance, getNodeID, addNode, onFlowChange]
+  const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useStore(
+    selector,
+    shallow
   );
+
+  // Removed onDrop function - no longer needed with click-to-add functionality
 
   // Function to update OutputsNode position when TextNode moves
   const updateOutputsNodePosition = useCallback(
@@ -186,13 +96,8 @@ const FlowCanvasOrganism = ({ onNodeClick, onPaneClick, onFlowChange }) => {
     []
   );
 
-  const onDragOver = useCallback((event) => {
-    event.preventDefault();
-    event.dataTransfer.dropEffect = "move";
-  }, []);
-
   return (
-    <div ref={reactFlowWrapper} className="w-screen h-[70vh]">
+    <div className="w-screen h-[70vh]">
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -247,9 +152,6 @@ const FlowCanvasOrganism = ({ onNodeClick, onPaneClick, onFlowChange }) => {
           return () => clearTimeout(timeoutId);
         }}
         onConnect={onConnect}
-        onDrop={onDrop}
-        onDragOver={onDragOver}
-        onInit={setReactFlowInstance}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         proOptions={proOptions}

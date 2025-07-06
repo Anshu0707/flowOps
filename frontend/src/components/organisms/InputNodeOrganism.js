@@ -20,7 +20,7 @@ const InputNodeOrganism = ({ id, data }) => {
     <BaseNode
       id={id}
       title="Input"
-      icon="ArrowRightStartOnRectangle"
+      icon="ArrowRightEndOnRectangle"
       description="Pass data of different types into your workflow"
       width={260}
       minHeight={110}

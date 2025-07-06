@@ -2,6 +2,7 @@ import React, { useMemo, useState } from "react";
 import { DraggableNode } from "../DraggableNode";
 import Icon from "../atoms/Icon";
 import { Bot } from "lucide-react";
+import { useStore } from "../../store/store";
 import {
   nodeCategories,
   getAllNodes,
@@ -12,6 +13,11 @@ const NodePaletteOrganism = () => {
   const [selectedCategory, setSelectedCategory] = useState("General");
   const [showSearch, setShowSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+
+  const { getNodeID, addNode } = useStore((state) => ({
+    getNodeID: state.getNodeID,
+    addNode: state.addNode,
+  }));
 
   // Get all nodes from all categories for search - memoized to prevent recalculation
   const allNodes = useMemo(() => {
@@ -118,23 +124,34 @@ const NodePaletteOrganism = () => {
           {filteredNodes.map((node) => {
             // Special case for ChatGPT node: use Lucide Bot icon
             if (node.type === "customLLM") {
+              const handleLLMClick = () => {
+                const nodeID = getNodeID(node.type);
+                const newNode = {
+                  id: nodeID,
+                  type: node.type,
+                  position: { x: 400, y: 200 }, // Default center position
+                  data: { id: nodeID, nodeType: node.type },
+                };
+                addNode(newNode);
+              };
+
+              // Lightweight drag fallback for accessibility
+              const onDragStart = (event) => {
+                const appData = { nodeType: node.type };
+                event.dataTransfer.setData(
+                  "application/reactflow",
+                  JSON.stringify(appData)
+                );
+                event.dataTransfer.effectAllowed = "move";
+              };
+
               return (
                 <div
                   key={node.type}
-                  className="cursor-grab min-w-[80px] h-[60px] flex items-center rounded-lg bg-white border border-gray-200 justify-center flex-col gap-1 shadow-sm"
+                  className="cursor-grab min-w-[80px] h-[60px] flex items-center rounded-lg bg-white border border-gray-200 justify-center flex-col gap-1 shadow-sm hover:shadow-md transition-shadow duration-200"
+                  onClick={handleLLMClick}
+                  onDragStart={onDragStart}
                   draggable
-                  onDragStart={(event) => {
-                    const appData = { nodeType: node.type };
-                    event.target.style.cursor = "grabbing";
-                    event.dataTransfer.setData(
-                      "application/reactflow",
-                      JSON.stringify(appData)
-                    );
-                    event.dataTransfer.effectAllowed = "move";
-                  }}
-                  onDragEnd={(event) => {
-                    event.target.style.cursor = "grab";
-                  }}
                 >
                   <Bot className="w-6 h-6 text-indigo-600" />
                   <span className="text-gray-700 text-xs font-medium">

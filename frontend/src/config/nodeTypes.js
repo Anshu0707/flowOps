@@ -6,7 +6,7 @@ export const nodeCategories = [
       {
         type: "customInput",
         label: "Input",
-        icon: "ArrowRightStartOnRectangle",
+        icon: "ArrowRightEndOnRectangle",
       },
       {
         type: "customText",
@@ -16,7 +16,7 @@ export const nodeCategories = [
       {
         type: "customOutput",
         label: "Output",
-        icon: "ArrowRightEndOnRectangle",
+        icon: "ArrowRightStartOnRectangle",
       },
     ],
   },

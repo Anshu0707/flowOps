@@ -12,7 +12,7 @@ export const useFlowBuilder = () => {
     edges: state.edges,
   }));
 
-  // Event handlers - all using useCallback for consistency
+  // Event handlers - simplified for click-based workflow
   const onNodeClick = useCallback((event, node) => {
     setSelectedNode(node);
     setShowNodeEditor(true);
@@ -21,49 +21,6 @@ export const useFlowBuilder = () => {
   const onPaneClick = useCallback(() => {
     setSelectedNode(null);
     setShowNodeEditor(false);
-  }, []);
-
-  const onDragStart = useCallback((event, nodeType) => {
-    try {
-      if (!event || !nodeType) {
-        console.error("Invalid drag start parameters:", { event, nodeType });
-        return;
-      }
-
-      event.dataTransfer.setData("application/reactflow", nodeType);
-      event.dataTransfer.effectAllowed = "move";
-    } catch (error) {
-      console.error("Drag start failed:", error);
-    }
-  }, []);
-
-  const onDragOver = useCallback((event) => {
-    try {
-      if (!event) {
-        console.error("Invalid drag over event");
-        return;
-      }
-
-      event.preventDefault();
-      event.dataTransfer.dropEffect = "move";
-    } catch (error) {
-      console.error("Drag over failed:", error);
-    }
-  }, []);
-
-  const onDrop = useCallback((event) => {
-    try {
-      if (!event) {
-        console.error("Invalid drop event");
-        return;
-      }
-
-      event.preventDefault();
-      // The drop logic is handled by React Flow internally
-      // We just need to prevent default and let React Flow handle it
-    } catch (error) {
-      console.error("Drop operation failed:", error);
-    }
   }, []);
 
   const onFlowChange = useCallback(({ nodes, edges }) => {
@@ -94,9 +51,6 @@ export const useFlowBuilder = () => {
     // Actions
     onNodeClick,
     onPaneClick,
-    onDragStart,
-    onDragOver,
-    onDrop,
     onFlowChange,
     onSaveNode,
     onCloseEditor,

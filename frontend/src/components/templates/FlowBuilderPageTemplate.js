@@ -20,9 +20,6 @@ const FlowBuilderPageTemplate = ({
   // Actions
   onNodeClick,
   onPaneClick,
-  onDragStart,
-  onDragOver,
-  onDrop,
   onFlowChange,
   onSaveNode,
   onCloseEditor,
@@ -53,8 +50,6 @@ const FlowBuilderPageTemplate = ({
         <FlowCanvasOrganism
           onNodeClick={onNodeClick}
           onPaneClick={onPaneClick}
-          onDragOver={onDragOver}
-          onDrop={onDrop}
           onFlowChange={onFlowChange}
         />
       }

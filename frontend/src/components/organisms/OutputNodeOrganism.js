@@ -21,7 +21,7 @@ const OutputNodeOrganism = ({ id, data }) => {
     <BaseNode
       id={id}
       title="Output"
-      icon="ArrowRightEndOnRectangle"
+      icon="ArrowRightStartOnRectangle"
       description="Output data of different types from your workflow"
       width={280}
       minHeight={110}
