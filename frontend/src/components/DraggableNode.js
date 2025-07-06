@@ -1,6 +1,8 @@
 // draggableNode.js
+import React from "react";
+import Icon from "./atoms/Icon";
 
-export const DraggableNode = ({ type, label }) => {
+export const DraggableNode = React.memo(({ type, label, icon }) => {
   const onDragStart = (event, nodeType) => {
     const appData = { nodeType };
     event.target.style.cursor = "grabbing";
@@ -11,27 +13,19 @@ export const DraggableNode = ({ type, label }) => {
     event.dataTransfer.effectAllowed = "move";
   };
 
+  const onDragEnd = (event) => {
+    event.target.style.cursor = "grab";
+  };
+
   return (
     <div
-      className={type}
+      className={`${type} cursor-grab min-w-[80px] h-[60px] flex items-center rounded-lg bg-white border border-gray-200 justify-center flex-col gap-1 shadow-sm`}
       onDragStart={(event) => onDragStart(event, type)}
-      onDragEnd={(event) => (event.target.style.cursor = "grab")}
-      style={{
-        cursor: "grab",
-        minWidth: "80px",
-        height: "60px",
-        display: "flex",
-        alignItems: "center",
-        borderRadius: "8px",
-        backgroundColor: "#1C2536",
-        justifyContent: "center",
-        flexDirection: "column",
-      }}
+      onDragEnd={onDragEnd}
       draggable
     >
-      <span style={{ color: "#fff" }}>{label}</span>
+      {icon && <Icon name={icon} className="w-6 h-6 text-indigo-600" />}
+      <span className="text-gray-700 text-xs font-medium">{label}</span>
     </div>
   );
-};
-
-export default DraggableNode;
+});

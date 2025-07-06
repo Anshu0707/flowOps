@@ -1,14 +1,12 @@
-import { PipelineToolbar } from "./components/Toolbar";
-import { PipelineUI } from "./layout/UI";
-import { SubmitButton } from "./components/SubmitButton";
+import React from "react";
+import FlowBuilderPage from "./pages/FlowBuilderPage";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 function App() {
   return (
-    <div>
-      <PipelineToolbar />
-      <PipelineUI />
-      <SubmitButton />
-    </div>
+    <ErrorBoundary>
+      <FlowBuilderPage />
+    </ErrorBoundary>
   );
 }
 

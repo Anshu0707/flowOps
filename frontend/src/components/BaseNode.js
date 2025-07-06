@@ -1,22 +1,67 @@
 import React from "react";
-import { Handle, Position } from "reactflow";
+import { Handle, Position, useReactFlow } from "reactflow";
+import Icon from "./atoms/Icon";
+import { useStore } from "../store/store";
+import clsx from "clsx";
+import {
+  nodeStyles,
+  getHandleStyle,
+  getNodeStyle,
+  designTokens,
+} from "../utils/styles";
 
 const BaseNode = ({
   id,
   title,
+  icon,
+  leftIcon,
+  description,
   width = 320,
   minHeight = 120,
   children,
   handles = [],
+  showCloseButton = true,
+  iconPosition = "left",
+  ...props
 }) => {
+  const { setNodes } = useReactFlow();
+  const edges = useStore((state) => state.edges);
+  const removeNode = useStore((state) => state.removeNode);
+
+  const handleClose = () => {
+    // Remove node and all its connected edges
+    removeNode(id);
+    // Also update ReactFlow's internal state
+    setNodes((nodes) => nodes.filter((node) => node.id !== id));
+  };
+
+  // Helper to check if a handle is connected
+  const isHandleConnected = (handleId, type) => {
+    if (type === "source") {
+      // Check if any edge has source = this node and sourceHandle = handleId
+      return edges.some(
+        (edge) => edge.source === id && edge.sourceHandle === handleId
+      );
+    } else {
+      // type === "target"
+      return edges.some(
+        (edge) => edge.target === id && edge.targetHandle === handleId
+      );
+    }
+  };
+
   return (
     <div
-      className="bg-white border border-gray-200 rounded-xl shadow-lg flex flex-col transition-all duration-200 hover:shadow-2xl hover:border-indigo-500 p-0"
-      style={{ width, minHeight, minWidth: 180, position: "relative" }}
+      className={clsx(nodeStyles.base)}
+      style={getNodeStyle(width, minHeight, props.style)}
+      {...props}
     >
       {/* Handles */}
       {handles.map((handle, idx) => {
-        // Extract variable name for left-side handles (id format: `${id}-var-${variable}`)
+        const connected = isHandleConnected(
+          handle.id || `${id}-handle-${idx}`,
+          handle.type
+        );
         return (
           <Handle
             key={handle.id || idx}
@@ -24,29 +69,59 @@ const BaseNode = ({
             position={handle.position || Position.Left}
             id={handle.id || `${id}-handle-${idx}`}
             style={{
+              ...getHandleStyle(handle.type, connected),
               ...handle.style,
-              zIndex: 10,
-              background:
-                handle.type === "source"
-                  ? "#6366f1" // indigo-500
-                  : "#a1a1aa", // zinc-400 for target
-              border: "2px solid #fff",
-              width: 16,
-              height: 16,
-              boxShadow: "0 2px 8px 0 rgba(99,102,241,0.10)",
             }}
             {...handle.rest}
           />
         );
       })}
       {/* Title */}
-      <div className="px-4 py-2 border-b border-gray-100 text-center bg-indigo-50 rounded-t-xl shadow-sm tracking-wide">
-        {title}
+      <div
+        className={clsx(nodeStyles.title)}
+        style={{ position: "relative", zIndex: designTokens.zIndex.base }}
+      >
+        <div className={clsx(nodeStyles.header)}>
+          <div className={clsx(nodeStyles.titleContent)}>
+            {leftIcon && (
+              <div className={clsx(nodeStyles.icon)}>
+                {typeof leftIcon === "string" ? (
+                  <Icon name={leftIcon} />
+                ) : (
+                  leftIcon
+                )}
+              </div>
+            )}
+            {icon && iconPosition === "left" && (
+              <Icon name={icon} className={clsx(nodeStyles.icon)} />
+            )}
+            <span className={clsx(nodeStyles.titleText)}>{title}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            {/* Close Button - moved here for proper alignment */}
+            {showCloseButton && (
+              <button
+                onClick={handleClose}
+                className={clsx(nodeStyles.closeButton)}
+                title="Remove node"
+              >
+                <Icon name="XMarkCircle" className="w-5 h-5 font-bold" />
+              </button>
+            )}
+            {/* Icon positioned at the far right */}
+            {icon && iconPosition === "right" && (
+              <Icon name={icon} className={clsx(nodeStyles.icon)} />
+            )}
+          </div>
+        </div>
+        {description && (
+          <div className={clsx(nodeStyles.description)}>
+            <p className={clsx(nodeStyles.descriptionText)}>{description}</p>
+          </div>
+        )}
       </div>
       {/* Content */}
-      <div className="flex-1 flex flex-col justify-center w-full h-full p-4 gap-2">
-        {children}
-      </div>
+      <div className={clsx(nodeStyles.content)}>{children}</div>
     </div>
   );
 };
