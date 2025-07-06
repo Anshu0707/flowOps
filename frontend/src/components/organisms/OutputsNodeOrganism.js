@@ -7,7 +7,7 @@ import { designTokens } from "../../utils/styles";
 const OutputsNodeOrganism = ({ id, data }) => {
   const { variables = [] } = data || {};
 
-  console.log("OutputsNode variables:", variables, "data:", data);
+  // console.log("OutputsNode variables:", variables, "data:", data);
 
   // No handles on OutputsNode - they're now on TextNode
   const handles = [];

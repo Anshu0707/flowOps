@@ -150,11 +150,11 @@ const FlowCanvasOrganism = ({ onNodeClick, onPaneClick, onFlowChange }) => {
         typeof textNodePosition.x === "undefined" ||
         typeof textNodePosition.y === "undefined"
       ) {
-        console.warn(
-          "Invalid position data for TextNode:",
-          textNodeId,
-          textNodePosition
-        );
+        // console.warn(
+        //   "Invalid position data for TextNode:",
+        //   textNodeId,
+        //   textNodePosition
+        // );
         return;
       }
 
