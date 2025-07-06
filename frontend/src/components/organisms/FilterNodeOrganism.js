@@ -10,10 +10,20 @@ const FilterNodeOrganism = ({ id, data }) => {
   );
   const [filterValue, setFilterValue] = useState(data?.filterValue || "");
 
-  // Filter-specific handles
+  // Centered handles (half inside, half outside)
   const handles = [
-    { type: "target", position: Position.Left, id: `${id}-input` },
-    { type: "source", position: Position.Right, id: `${id}-output` },
+    {
+      type: "target",
+      position: Position.Left,
+      id: `${id}-input`,
+      style: { top: "50%", left: "-8px", transform: "translateY(-50%)" },
+    },
+    {
+      type: "source",
+      position: Position.Right,
+      id: `${id}-output`,
+      style: { top: "50%", right: "-8px", transform: "translateY(-50%)" },
+    },
   ];
 
   // Filter-specific options
@@ -27,6 +37,18 @@ const FilterNodeOrganism = ({ id, data }) => {
     "less_than",
   ];
 
+  // Badges
+  const dropdownBadge = (
+    <span className="px-2 py-0.5 bg-indigo-600 text-white text-xs font-semibold rounded-full ml-2">
+      Dropdown
+    </span>
+  );
+  const textBadge = (
+    <span className="px-2 py-0.5 bg-indigo-600 text-white text-xs font-semibold rounded-full ml-2">
+      Text
+    </span>
+  );
+
   return (
     <BaseNode
       id={id}
@@ -39,14 +61,24 @@ const FilterNodeOrganism = ({ id, data }) => {
     >
       <div className="flex flex-col gap-3 w-full">
         <FormField
-          label="Condition:"
+          label={
+            <div className="flex items-center justify-between w-full">
+              <span>Condition:</span>
+              {dropdownBadge}
+            </div>
+          }
           type="select"
           value={filterCondition}
           onChange={(e) => setFilterCondition(e.target.value)}
           options={filterOptions}
         />
         <FormField
-          label="Value:"
+          label={
+            <div className="flex items-center justify-between w-full">
+              <span>Value:</span>
+              {textBadge}
+            </div>
+          }
           type="input"
           value={filterValue}
           onChange={(e) => setFilterValue(e.target.value)}

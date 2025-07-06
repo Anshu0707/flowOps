@@ -10,15 +10,20 @@ const LLMNodeOrganism = ({ id, data }) => {
   const [system, setSystem] = useState(data?.system || "");
   const [prompt, setPrompt] = useState(data?.prompt || "");
 
-  // Only one handle for 'Prompt' field
+  // Centered handles (half inside, half outside)
   const handles = [
     {
       type: "target",
       position: Position.Left,
       id: `${id}-prompt`,
-      style: { top: "50%" },
+      style: { top: "50%", left: "-8px", transform: "translateY(-50%)" },
     },
-    { type: "source", position: Position.Right, id: `${id}-response` },
+    {
+      type: "source",
+      position: Position.Right,
+      id: `${id}-response`,
+      style: { top: "50%", right: "-8px", transform: "translateY(-50%)" },
+    },
   ];
 
   // LLM-specific model options
@@ -33,6 +38,18 @@ const LLMNodeOrganism = ({ id, data }) => {
     "text-babbage-001",
     "text-ada-001",
   ];
+
+  // Badges
+  const dropdownBadge = (
+    <span className="px-2 py-0.5 bg-indigo-600 text-white text-xs font-semibold rounded-full ml-2">
+      Dropdown
+    </span>
+  );
+  const textBadge = (
+    <span className="px-2 py-0.5 bg-indigo-600 text-white text-xs font-semibold rounded-full ml-2">
+      Text
+    </span>
+  );
 
   return (
     <BaseNode
@@ -50,21 +67,36 @@ const LLMNodeOrganism = ({ id, data }) => {
     >
       <div className="flex flex-col gap-3 w-full">
         <FormField
-          label="Model:"
+          label={
+            <div className="flex items-center justify-between w-full">
+              <span>Model:</span>
+              {dropdownBadge}
+            </div>
+          }
           type="select"
           value={selectedModel}
           onChange={(e) => setSelectedModel(e.target.value)}
           options={modelOptions}
         />
         <FormField
-          label="System:"
+          label={
+            <div className="flex items-center justify-between w-full">
+              <span>System:</span>
+              {textBadge}
+            </div>
+          }
           type="textarea"
           value={system}
           onChange={(e) => setSystem(e.target.value)}
           placeholder="Enter system message..."
         />
         <FormField
-          label="Prompt:"
+          label={
+            <div className="flex items-center justify-between w-full">
+              <span>Prompt:</span>
+              {textBadge}
+            </div>
+          }
           type="textarea"
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}

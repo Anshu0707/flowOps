@@ -9,6 +9,13 @@ const CommentNodeOrganism = ({ id, data }) => {
   // Comment-specific handles (no handles for comments)
   const handles = [];
 
+  // Badge
+  const textBadge = (
+    <span className="px-2 py-0.5 bg-indigo-600 text-white text-xs font-semibold rounded-full ml-2">
+      Text
+    </span>
+  );
+
   return (
     <BaseNode
       id={id}
@@ -21,7 +28,12 @@ const CommentNodeOrganism = ({ id, data }) => {
     >
       <div className="flex flex-col gap-3 w-full">
         <FormField
-          label="Comment:"
+          label={
+            <div className="flex items-center justify-between w-full">
+              <span>Comment:</span>
+              {textBadge}
+            </div>
+          }
           type="textarea"
           value={comment}
           onChange={(e) => setComment(e.target.value)}

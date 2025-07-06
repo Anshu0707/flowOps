@@ -189,10 +189,17 @@ const TextNodeOrganism = ({ id, data }) => {
         type: "source",
         position: Position.Right,
         id: `${id}-output`,
-        style: { top: "50%" },
+        style: { top: "50%", right: "-8px", transform: "translateY(-50%)" },
       },
     ];
   }, [id]);
+
+  // Badge for text field
+  const textBadge = (
+    <span className="px-2 py-0.5 bg-indigo-600 text-white text-xs font-semibold rounded-full ml-2">
+      Text
+    </span>
+  );
 
   return (
     <BaseNode
@@ -206,7 +213,12 @@ const TextNodeOrganism = ({ id, data }) => {
     >
       <div className="flex flex-col gap-3 w-full">
         <FormField
-          label="Text:"
+          label={
+            <div className="flex items-center justify-between w-full">
+              <span>Text:</span>
+              {textBadge}
+            </div>
+          }
           type="textarea"
           value={text}
           onChange={(e) => setText(e.target.value)}

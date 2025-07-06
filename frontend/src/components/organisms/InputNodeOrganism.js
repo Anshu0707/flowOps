@@ -11,10 +11,25 @@ const InputNodeOrganism = ({ id, data }) => {
   const [inputType, setInputType] = useState(data?.inputType || "Text");
   const [isInputFocused, setIsInputFocused] = useState(false);
 
-  // Input-specific handles
+  // Input-specific handles (centered, half outside the right boundary)
   const handles = [
-    { type: "source", position: Position.Right, id: `${id}-value` },
+    {
+      type: "source",
+      position: Position.Right,
+      id: `${id}-value`,
+      style: { top: "50%", right: "-8px", transform: "translateY(-50%)" }, // 16px handle, half outside
+    },
   ];
+
+  // Custom label row with badge right-aligned
+  const typeLabel = (
+    <div className="flex items-center justify-between w-full">
+      <span>Type:</span>
+      <span className="px-2 py-0.5 bg-indigo-600 text-white text-xs font-semibold rounded-full ml-2">
+        Dropdown
+      </span>
+    </div>
+  );
 
   return (
     <BaseNode
@@ -39,7 +54,7 @@ const InputNodeOrganism = ({ id, data }) => {
           }`}
         />
         <FormField
-          label="Type:"
+          label={typeLabel}
           type="select"
           value={inputType}
           onChange={(e) => setInputType(e.target.value)}

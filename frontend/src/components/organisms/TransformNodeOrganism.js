@@ -12,10 +12,20 @@ const TransformNodeOrganism = ({ id, data }) => {
     data?.customTransform || ""
   );
 
-  // Transform-specific handles
+  // Centered handles (half inside, half outside)
   const handles = [
-    { type: "target", position: Position.Left, id: `${id}-input` },
-    { type: "source", position: Position.Right, id: `${id}-output` },
+    {
+      type: "target",
+      position: Position.Left,
+      id: `${id}-input`,
+      style: { top: "50%", left: "-8px", transform: "translateY(-50%)" },
+    },
+    {
+      type: "source",
+      position: Position.Right,
+      id: `${id}-output`,
+      style: { top: "50%", right: "-8px", transform: "translateY(-50%)" },
+    },
   ];
 
   // Transform-specific options
@@ -26,6 +36,13 @@ const TransformNodeOrganism = ({ id, data }) => {
     "reverse",
     "custom",
   ];
+
+  // Badge
+  const dropdownBadge = (
+    <span className="px-2 py-0.5 bg-indigo-600 text-white text-xs font-semibold rounded-full ml-2">
+      Dropdown
+    </span>
+  );
 
   return (
     <BaseNode
@@ -39,7 +56,12 @@ const TransformNodeOrganism = ({ id, data }) => {
     >
       <div className="flex flex-col gap-3 w-full">
         <FormField
-          label="Type:"
+          label={
+            <div className="flex items-center justify-between w-full">
+              <span>Type:</span>
+              {dropdownBadge}
+            </div>
+          }
           type="select"
           value={transformType}
           onChange={(e) => setTransformType(e.target.value)}

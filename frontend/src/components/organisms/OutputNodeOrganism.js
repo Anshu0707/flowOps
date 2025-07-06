@@ -12,9 +12,14 @@ const OutputNodeOrganism = ({ id, data }) => {
   const [output, setOutput] = useState(data?.output || "");
   const [isInputFocused, setIsInputFocused] = useState(false);
 
-  // Output-specific handles
+  // Output-specific handles (centered, half outside left boundary)
   const handles = [
-    { type: "target", position: Position.Left, id: `${id}-value` },
+    {
+      type: "target",
+      position: Position.Left,
+      id: `${id}-value`,
+      style: { top: "50%", left: "-8px", transform: "translateY(-50%)" },
+    },
   ];
 
   return (
