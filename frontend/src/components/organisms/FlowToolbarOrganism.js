@@ -7,8 +7,8 @@ const FlowToolbarOrganism = ({ nodeCount, edgeCount, flowData }) => {
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2">
           <img
-            src="/vectorshift.png"
-            alt="VectorShift Logo"
+            src="/Robot_2.png"
+            alt="FlowOps Logo"
             className="h-6 w-auto object-contain"
             onError={(e) => {
               console.error("Failed to load VectorShift logo");
@@ -16,7 +16,7 @@ const FlowToolbarOrganism = ({ nodeCount, edgeCount, flowData }) => {
             }}
           />
           <h1 className="text-lg font-bold text-indigo-600 drop-shadow-[0_0_8px_rgba(99,102,241,0.6)] transition-all duration-300 cursor-default">
-            VectorShift
+            FlowOps
           </h1>
         </div>
         <span className="text-sm font-semibold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-200 shadow-sm">

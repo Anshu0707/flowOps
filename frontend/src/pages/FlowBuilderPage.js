@@ -11,7 +11,11 @@ const FlowBuilderPage = () => {
   const flowBuilderData = useFlowBuilder();
 
   // Pure composition - just pass data to template
-  return <FlowBuilderPageTemplate {...flowBuilderData} />;
+  return (
+    <FlowBuilderPageTemplate {...flowBuilderData}>
+      <h1>FlowOps</h1>
+    </FlowBuilderPageTemplate>
+  );
 };
 
 export default FlowBuilderPage;
