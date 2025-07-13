@@ -52,7 +52,6 @@ uvicorn main:app --reload
 - Pipeline
 <img width="2559" height="1236" alt="Screenshot 2025-07-13 193542" src="https://github.com/user-attachments/assets/d1ca116f-d613-4aba-b621-523882fadf15" />
 
---
 
 - Pipeline Stats
 <img width="585" height="631" alt="Screenshot 2025-07-13 193601" src="https://github.com/user-attachments/assets/a4666f64-8839-4f22-b206-ea543f82e913" />
