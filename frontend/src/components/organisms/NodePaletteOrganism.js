@@ -74,8 +74,6 @@ const NodePaletteOrganism = () => {
     setSearchTerm("");
   };
 
-  // Removed excessive console.log to prevent re-rendering issues
-
   return (
     <>
       {/* Category Tabs */}

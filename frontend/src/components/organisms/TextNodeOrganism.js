@@ -26,7 +26,6 @@ const TextNodeOrganism = ({ id, data }) => {
   // Parse variables from text input with memoization
   const variables = useMemo(() => {
     const parsed = parseVariables(text);
-    // console.log("Parsed variables:", parsed, "from text:", text);
     return parsed;
   }, [text]);
 
@@ -94,7 +93,6 @@ const TextNodeOrganism = ({ id, data }) => {
         // Get the current TextNode to calculate position
         const textNode = existingNodes.find((node) => node.id === id);
         if (!textNode) {
-          // console.warn(`TextNode with id ${id} not found`);
           return;
         }
 
